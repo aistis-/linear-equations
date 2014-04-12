@@ -13,9 +13,12 @@ namespace App
         public static string matrixC;
         public static string matrixD;
 
+        public static int k;
+
         [STAThread]
         static void Main(string[] args)
         {
+
             Console.WriteLine("Choose files which contains seperated matrix (B, C and D)");
 
             // iniciate file chosers for each matrix
@@ -25,7 +28,13 @@ namespace App
 
             printLoadedMatrices();
 
-            
+            Console.Write("Type k (number of condition): ");
+            k = int.Parse(Console.ReadLine());
+
+            Console.WriteLine("\n\n");
+
+            JacobiMethod calculations = new JacobiMethod();
+            calculations.solve();
 
             Console.ReadKey();
         }
