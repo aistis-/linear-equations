@@ -13,7 +13,8 @@ namespace App
         public static string matrixC;
         public static string matrixD;
 
-        public static int k;
+        public static float k;
+        public static float x;
 
         [STAThread]
         static void Main(string[] args)
@@ -29,11 +30,16 @@ namespace App
             printLoadedMatrices();
 
             Console.Write("Type k (number of condition): ");
-            k = int.Parse(Console.ReadLine());
+            k = float.Parse(Console.ReadLine());
+
+            Console.Write("Type x (x zero): ");
+            x = float.Parse(Console.ReadLine());
 
             Console.WriteLine("\n\n");
 
-            JacobiMethod calculations = new JacobiMethod();
+            Matrix matrixA = new Matrix(matrixD, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
+
+            JacobiMethod calculations = new JacobiMethod(matrixA, new Matrix(matrixB, "\n"), x);
             calculations.solve();
 
             Console.ReadKey();
