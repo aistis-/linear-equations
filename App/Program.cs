@@ -15,6 +15,7 @@ namespace App
         public static string matrixX;
 
         public static float k;
+        public static float epsilon;
 
         [STAThread]
         static void Main(string[] args)
@@ -32,12 +33,15 @@ namespace App
             Console.Write("Type k (number of condition): ");
             k = float.Parse(Console.ReadLine());
 
+            Console.Write("Type accuracy (epsilon): ");
+            epsilon = float.Parse(Console.ReadLine());
+
             Console.WriteLine("\n\n");
 
             Matrix matrixA = new Matrix(matrixD, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
 
             JacobiMethod calculations = new JacobiMethod(
-                matrixA, new Matrix(matrixB, "\n"), new Matrix(matrixX, "\n")
+                matrixA, new Matrix(matrixB, "\n"), new Matrix(matrixX, "\n"), epsilon
             );
 
             calculations.solve();

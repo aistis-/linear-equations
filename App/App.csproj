@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="Description.pdf" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="MatrixFilesChooser.resx">

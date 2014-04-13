@@ -67,5 +67,19 @@ namespace App
 
             return this;
         }
+
+        public void print()
+        {
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+
+                for (int column = 0; column + 1 < this.matrix.GetLength(1); column++)
+                {
+                    Console.Write(String.Format("{0:0.#####}", matrix[row, column]) + " ");
+                }
+
+                Console.Write(String.Format("{0:0.#####}", matrix[row, this.matrix.GetLength(1) - 1]) + "\n");
+            }
+        }
     }
 }
