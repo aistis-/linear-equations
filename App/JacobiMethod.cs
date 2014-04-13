@@ -58,7 +58,7 @@ namespace App
 
                 printIteration(k, matrix);
 
-                if (isConvergenceReached(k + 1))
+                if (isAccurateEnough(k + 1))
                 {
                     break;
                 }
@@ -88,25 +88,28 @@ namespace App
             }
         }
 
-        private bool isConvergenceReached(int k)
+        private bool isAccurateEnough(int k)
         {
-            float coef;
-            float result = 0;
+            float result;
 
             for (int i = 0; i < matrixA.getSize(); i++)
             {
-                coef = 0;
+                result = 0;
 
                 for (int j = 0; j < matrixA.getSize(); j++)
                 {
-                    coef += matrixA.matrix[j, i];
+                    result += matrixA.matrix[i, j] * x[k].matrix[j, 0];
                 }
 
-                result += coef * x[k].matrix[i, 0];
                 result -= matrixB.matrix[i, 0];
+
+                if (epsilon < Math.Abs(result))
+                {
+                    return false;
+                }
             }
 
-            return epsilon >= Math.Abs(result);
+            return true;
         }
 
         private float[,] getZeroMatrixForX(int n)
