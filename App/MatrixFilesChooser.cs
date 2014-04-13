@@ -20,9 +20,9 @@ namespace App
 
         private void MatrixFilesChooser_Load(object sender, EventArgs e)
         {
-            string[] letters = { "B", "C", "D" };
+            string[] letters = { "B", "C", "D", "X" };
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < letters.Length; i++)
             {
                 Stream fileStream = null;
                 OpenFileDialog theDialog = new OpenFileDialog();
@@ -52,6 +52,9 @@ namespace App
                                         break;
                                     case 2:
                                         Program.matrixD = content;
+                                        break;
+                                    case 3:
+                                        Program.matrixX = content;
 
                                         this.Close();
 

@@ -11,6 +11,11 @@ namespace App
     {
         public float[,] matrix;
 
+        public Matrix(float[,] matrix)
+        {
+            this.matrix = matrix;
+        }
+
         public Matrix(string matrixInString, string lineSeparator)
         {
             string[] rows = matrixInString.Split(new string[] { lineSeparator }, StringSplitOptions.None);
@@ -34,7 +39,7 @@ namespace App
 
         public int getSize()
         {
-            return matrix.Length;
+            return matrix.GetLength(0);
         }
 
         public Matrix multiplyBy(float multiplier)
