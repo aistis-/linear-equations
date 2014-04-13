@@ -29,44 +29,75 @@ namespace App
 
         public void solve()
         {
-            int k = 0;
-            int n = matrixA.getSize();
-
-            float sigma;
-            Matrix matrix = null;
-
-            do
+            if (!converges())
             {
-                matrix = new Matrix(getZeroMatrixForX(n));
+                Console.WriteLine("Matrix A does not satisfiy convergence conditions");
+            }
+            else
+            {
+                int k = 0;
+                int n = matrixA.getSize();
 
-                for (int i = 0; i < n; i++)
+                float sigma;
+                Matrix matrix = null;
+
+                do
                 {
-                    sigma = 0;
+                    matrix = new Matrix(getZeroMatrixForX(n));
 
-                    for (int j = 0; j < n; j++)
+                    for (int i = 0; i < n; i++)
                     {
-                        if (i != j)
+                        sigma = 0;
+
+                        for (int j = 0; j < n; j++)
                         {
-                            sigma += matrixA.matrix[i, j] * x[k].matrix[j, 0];
+                            if (i != j)
+                            {
+                                sigma += matrixA.matrix[i, j] * x[k].matrix[j, 0];
+                            }
                         }
+
+                        matrix.matrix[i, 0] = (matrixB.matrix[i, 0] - sigma) / matrixA.matrix[i, i];
                     }
 
-                    matrix.matrix[i, 0] = (matrixB.matrix[i, 0] - sigma) / matrixA.matrix[i, i];
-                }
+                    x.Add(k + 1, matrix);
 
-                x.Add(k + 1, matrix);
+                    printIteration(k, matrix);
 
-                printIteration(k, matrix);
+                    if (isAccurateEnough(k + 1))
+                    {
+                        break;
+                    }
 
-                if (isAccurateEnough(k + 1))
+                    k++;
+                } while (true);
+
+                Console.WriteLine("Calculated in " + k + " iterations");
+            }
+        }
+
+        private bool converges()
+        {
+            float sum;
+
+            for (int i = 0; i < matrixA.getSize(); i++)
+            {
+                sum = 0;
+
+                for (int j = 0; j < matrixA.getSize(); j++)
                 {
-                    break;
+                    if (i != j) {
+                        sum += matrixA.matrix[i, j];
+                    }
                 }
 
-                k++;
-            } while (true);
+                if (Math.Abs(matrixA.matrix[i, i]) <= Math.Abs(sum))
+                {
+                    return false;
+                }
+            }
 
-            Console.WriteLine("Calculated in " + k + " iterations");
+            return true;
         }
 
         private void printIteration(int k, Matrix matrix)
