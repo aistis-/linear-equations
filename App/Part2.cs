@@ -7,12 +7,10 @@ using System.Windows.Forms;
 
 namespace App
 {
-    class Part1
+    class Part2
     {
-        public static string matrixB;
+        public static string matrixT;
         public static string matrixC;
-        public static string matrixD;
-        public static string matrixX;
 
         public static float k;
         public static float epsilon;
@@ -21,12 +19,12 @@ namespace App
         static void Main(string[] args)
         {
 
-            Console.WriteLine("Choose files which contains seperated matrices (B, C, D and iniciating X)");
+            Console.WriteLine("Choose files which contains seperated matrices (T and C)");
 
             // iniciate file chosers for each matrix
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MatrixFilesChooser(1));
+            Application.Run(new MatrixFilesChooser(2));
 
             printLoadedMatrices();
 

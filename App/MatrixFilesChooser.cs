@@ -13,14 +13,26 @@ namespace App
 {
     public partial class MatrixFilesChooser : Form
     {
-        public MatrixFilesChooser()
+        private int part;
+
+        public MatrixFilesChooser(int part)
         {
+            this.part = part;
+
             InitializeComponent();
         }
 
         private void MatrixFilesChooser_Load(object sender, EventArgs e)
         {
-            string[] letters = { "B", "C", "D", "X" };
+            string[] letters;
+            
+            if (part == 1)
+            {
+                letters = new string[] { "B", "C", "D", "X" };
+            }
+            else {
+                letters = new string[] { "T", "C"};
+            }
 
             for (int i = 0; i < letters.Length; i++)
             {
@@ -42,23 +54,38 @@ namespace App
                                 StreamReader reader = new StreamReader(fileStream);
                                 string content = reader.ReadToEnd();
 
-                                switch (i)
+                                if (1 == part)
                                 {
-                                    case 0:
-                                        Part1.matrixB = content;
-                                        break;
-                                    case 1:
-                                        Part1.matrixC = content;
-                                        break;
-                                    case 2:
-                                        Part1.matrixD = content;
-                                        break;
-                                    case 3:
-                                        Part1.matrixX = content;
+                                    switch (i)
+                                    {
+                                        case 0:
+                                            Part1.matrixB = content;
+                                            break;
+                                        case 1:
+                                            Part1.matrixC = content;
+                                            break;
+                                        case 2:
+                                            Part1.matrixD = content;
+                                            break;
+                                        case 3:
+                                            Part1.matrixX = content;
 
-                                        this.Close();
+                                            this.Close();
 
-                                        break;
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    switch (i)
+                                    {
+                                        case 0:
+                                            Part2.matrixT = content;
+                                            break;
+                                        case 1:
+                                            Part2.matrixC = content;
+                                            break;
+                                    }
                                 }
                             }
                         }
