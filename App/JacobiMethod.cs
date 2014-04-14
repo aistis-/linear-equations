@@ -91,7 +91,7 @@ namespace App
                     }
                 }
 
-                if (Math.Abs(matrixA.matrix[i, i]) <= Math.Abs(sum))
+                if (Math.Abs(matrixA.matrix[i, i]) < Math.Abs(sum))
                 {
                     return false;
                 }
