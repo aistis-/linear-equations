@@ -38,39 +38,32 @@ namespace App
                 int k = 0;
                 int n = matrixA.getSize();
 
-                float sigma;
-                Matrix matrix = null;
+                Matrix matrixX;
 
-                do
-                {
-                    matrix = new Matrix(getZeroMatrixForX(n));
+                Matrix matrixZ = matrixA.multiplyWith(x[k]).substractWith(matrixB);
+                Matrix matrixR;
 
-                    for (int i = 0; i < n; i++)
-                    {
-                        sigma = 0;
+                float tau;
 
-                        for (int j = 0; j < n; j++)
-                        {
-                            if (i != j)
-                            {
-                                sigma += matrixA.matrix[i, j] * x[k].matrix[j, 0];
-                            }
-                        }
+                do {
+                    matrixR = matrixA.multiplyWith(matrixZ);
 
-                        matrix.matrix[i, 0] = (matrixB.matrix[i, 0] - sigma) / matrixA.matrix[i, i];
-                    }
+                    tau = matrixZ.getDotProduct(matrixZ) / matrixR.getDotProduct(matrixZ);
 
-                    x.Add(k + 1, matrix);
+                    matrixX = x[k].substractWith(matrixZ.multiplyBy(tau));
+                    matrixZ = matrixA.multiplyWith(matrixX).substractWith(matrixB);
 
-                    printIteration(k, matrix);
+                    x.Add(k + 1, matrixX);
 
-                    if (isAccurateEnough(k + 1))
+                    printIteration(k, matrixX, matrixZ);
+
+                    if (isAccurateEnough(matrixZ))
                     {
                         break;
                     }
 
                     k++;
-                } while (true);
+                } while (k < 20);
 
                 Console.WriteLine("Calculated in " + k + " iterations");
             }
@@ -78,69 +71,57 @@ namespace App
 
         private bool converges()
         {
-            //float sum;
+            for (int i = 0; i < matrixA.getSize(); i++)
+            {
 
-            //for (int i = 0; i < matrixA.getSize(); i++)
-            //{
-            //    sum = 0;
-
-            //    for (int j = 0; j < matrixA.getSize(); j++)
-            //    {
-            //        if (i != j) {
-            //            sum += matrixA.matrix[i, j];
-            //        }
-            //    }
-
-            //    if (Math.Abs(matrixA.matrix[i, i]) <= Math.Abs(sum))
-            //    {
-            //        return false;
-            //    }
-            //}
+                for (int j = 0; j < matrixA.getSize(); j++)
+                {
+                    if (matrixA.matrix[i, j] != matrixA.matrix[j, i])
+                    {
+                        return false;
+                    }
+                }
+            }
 
             return true;
         }
 
-        private void printIteration(int k, Matrix matrix)
+        private void printIteration(int k, Matrix matrixX, Matrix matrixZ)
         {
             Console.Write("Iteration: " + (k + 1) + "  X: [");
 
-            int n = matrix.getSize();
+            int n = matrixX.getSize();
 
             for (int i = 0; i < n; i++)
             {
                 if (i + 1 == n)
                 {
-                    Console.Write(matrix.matrix[i, 0] + "]\n");
+                    Console.Write(matrixX.matrix[i, 0] + "]\n");
                 }
                 else
                 {
-                    Console.Write(matrix.matrix[i, 0] + ", ");
+                    Console.Write(matrixX.matrix[i, 0] + ", ");
+                }
+            }
+
+            Console.Write("Iteration: " + (k + 1) + "  Z: [");
+
+            for (int i = 0; i < n; i++)
+            {
+                if (i + 1 == n)
+                {
+                    Console.Write(matrixZ.matrix[i, 0] + "]\n");
+                }
+                else
+                {
+                    Console.Write(matrixZ.matrix[i, 0] + ", ");
                 }
             }
         }
 
-        private bool isAccurateEnough(int k)
+        private bool isAccurateEnough(Matrix matrixZ)
         {
-            float result;
-
-            for (int i = 0; i < matrixA.getSize(); i++)
-            {
-                result = 0;
-
-                for (int j = 0; j < matrixA.getSize(); j++)
-                {
-                    result += matrixA.matrix[i, j] * x[k].matrix[j, 0];
-                }
-
-                result -= matrixB.matrix[i, 0];
-
-                if (epsilon < Math.Abs(result))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return matrixZ.getDotProduct(matrixZ) < epsilon * epsilon;
         }
 
         private float[,] getZeroMatrixForX(int n)

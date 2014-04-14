@@ -42,6 +42,10 @@ namespace App
             Matrix loadedMatrixB = new Matrix(matrixB, "\n");
             Matrix loadedMatrixX = new Matrix(matrixX, "\n");
 
+            loadedMatrixA.matrix = new float[3, 3] {{2, 1, 0.95f}, {1, 2, 1}, {0.95f, 1, 2}};
+            loadedMatrixB.matrix = new float[3, 1] {{3.95f}, {4}, {3.95f}};
+            loadedMatrixX.matrix = new float[3, 1] { { 0 }, { 0 }, { 0 } };
+
             JacobiMethod jacobiMethod = new JacobiMethod(
                 loadedMatrixA, loadedMatrixB, loadedMatrixX, epsilon
             );

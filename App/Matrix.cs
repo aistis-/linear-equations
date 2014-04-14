@@ -44,35 +44,82 @@ namespace App
 
         public Matrix multiplyBy(float multiplier)
         {
+            float[,] result = matrix;
+
             for (int row = 0; row < matrix.GetLength(0); row++)
             {
                 for (int column = 0; column < matrix.GetLength(1); column++)
                 {
-                    matrix[row, column] *= multiplier;
+                    result[row, column] *= multiplier;
                 }
             }
 
-            return this;
+            return new Matrix(result);
         }
 
         public Matrix addWith(Matrix matrix)
         {
+            float[,] result = new float[this.matrix.GetLength(0), this.matrix.GetLength(1)];
+
             for (int row = 0; row < this.matrix.GetLength(0); row++)
             {
                 for (int column = 0; column < this.matrix.GetLength(1); column++)
                 {
-                    this.matrix[row, column] += matrix.matrix[row, column];
+                    result[row, column] = this.matrix[row, column] + matrix.matrix[row, column];
                 }
             }
 
-            return this;
+            return new Matrix(result);
+        }
+
+        public Matrix substractWith(Matrix matrix)
+        {
+            float[,] result = new float[this.matrix.GetLength(0), this.matrix.GetLength(1)];
+
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+                for (int column = 0; column < this.matrix.GetLength(1); column++)
+                {
+                    result[row, column] = this.matrix[row, column] - matrix.matrix[row, column];
+                }
+            }
+
+            return new Matrix(result);
+        }
+
+        public Matrix multiplyWith(Matrix matrix)
+        {
+            float[,] result = new float[this.matrix.GetLength(0), 1];
+
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+                result[row, 0] = 0;
+
+                for (int column = 0; column < this.matrix.GetLength(1); column++)
+                {
+                    result[row, 0] += this.matrix[row, column] * matrix.matrix[column, 0];
+                }
+            }
+
+            return new Matrix(result);
+        }
+
+        public float getDotProduct(Matrix matrix)
+        {
+            float result = 0;
+
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+                result += this.matrix[row, 0] * matrix.matrix[row, 0];
+            }
+
+            return result;
         }
 
         public void print()
         {
             for (int row = 0; row < this.matrix.GetLength(0); row++)
             {
-
                 for (int column = 0; column + 1 < this.matrix.GetLength(1); column++)
                 {
                     Console.Write(String.Format("{0:0.#####}", matrix[row, column]) + " ");
@@ -80,6 +127,21 @@ namespace App
 
                 Console.Write(String.Format("{0:0.#####}", matrix[row, this.matrix.GetLength(1) - 1]) + "\n");
             }
+        }
+
+        public float normOfFrobenius()
+        {
+            float result = 0;
+
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+                for (int column = 0; column + 1 < this.matrix.GetLength(1); column++)
+                {
+                    result += this.matrix[row, column] * this.matrix[row, column];
+                }
+            }
+
+            return (float) Math.Sqrt(result);
         }
     }
 }
