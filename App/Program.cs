@@ -38,13 +38,21 @@ namespace App
 
             Console.WriteLine("\n\n");
 
-            Matrix matrixA = new Matrix(matrixD, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
+            Matrix loadedMatrixA = new Matrix(matrixD, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
+            Matrix loadedMatrixB = new Matrix(matrixB, "\n");
+            Matrix loadedMatrixX = new Matrix(matrixX, "\n");
 
-            JacobiMethod calculations = new JacobiMethod(
-                matrixA, new Matrix(matrixB, "\n"), new Matrix(matrixX, "\n"), epsilon
+            JacobiMethod jacobiMethod = new JacobiMethod(
+                loadedMatrixA, loadedMatrixB, loadedMatrixX, epsilon
             );
 
-            calculations.solve();
+            jacobiMethod.solve();
+
+            SteepestDescentMethod steepestDescentMethod = new SteepestDescentMethod(
+                loadedMatrixA, loadedMatrixB, loadedMatrixX, epsilon
+            );
+
+            steepestDescentMethod.solve();
 
             Console.ReadKey();
         }
