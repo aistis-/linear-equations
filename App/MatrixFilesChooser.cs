@@ -45,16 +45,16 @@ namespace App
                                 switch (i)
                                 {
                                     case 0:
-                                        Program.matrixB = content;
+                                        Part1.matrixB = content;
                                         break;
                                     case 1:
-                                        Program.matrixC = content;
+                                        Part1.matrixC = content;
                                         break;
                                     case 2:
-                                        Program.matrixD = content;
+                                        Part1.matrixD = content;
                                         break;
                                     case 3:
-                                        Program.matrixX = content;
+                                        Part1.matrixX = content;
 
                                         this.Close();
 

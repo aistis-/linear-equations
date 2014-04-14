@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace App
 {
-    class Program
+    class Part1
     {
         public static string matrixB;
         public static string matrixC;
