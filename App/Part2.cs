@@ -15,6 +15,7 @@ namespace App
 
         public static float k;
         public static float epsilon;
+        public static float lambda;
 
         [STAThread]
         static void Main(string[] args)
@@ -35,13 +36,16 @@ namespace App
             Console.Write("Type accuracy (epsilon): ");
             epsilon = float.Parse(Console.ReadLine());
 
+            Console.Write("Type lambda: ");
+            lambda = float.Parse(Console.ReadLine());
+
             Console.WriteLine("\n\n");
 
             Matrix loadedMatrixA = new Matrix(matrixT, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
             Matrix loadedMatrixX = new Matrix(matrixX, "\n");
 
             InverseIteration steepestDescentMethod = new InverseIteration(
-                loadedMatrixA, loadedMatrixX, epsilon
+                loadedMatrixA, loadedMatrixX, epsilon, lambda
             );
 
             steepestDescentMethod.solve();
