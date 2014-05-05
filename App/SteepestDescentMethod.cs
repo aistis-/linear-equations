@@ -63,7 +63,7 @@ namespace App
                     }
 
                     k++;
-                } while (k < 20);
+                } while (true);
 
                 Console.WriteLine("Calculated in " + k + " iterations");
             }
