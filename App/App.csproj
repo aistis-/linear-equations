@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="InverseIteration.cs" />
     <Compile Include="JacobiMethod.cs" />
     <Compile Include="Matrix.cs" />
     <Compile Include="MatrixFilesChooser.cs">
