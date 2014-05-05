@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>App.Part2</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,6 +56,7 @@
       <DependentUpon>MatrixFilesChooser.cs</DependentUpon>
     </Compile>
     <Compile Include="Part1.cs" />
+    <Compile Include="Part2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SteepestDescentMethod.cs" />
   </ItemGroup>
