@@ -15,6 +15,8 @@ namespace App
 
         private Dictionary<int, Matrix> x;
 
+        private int maxIterations = 5000;
+
         public SteepestDescentMethod(Matrix matrixA, Matrix matrixB, Matrix matrixX, float epsilon)
         {
             this.matrixA = matrixA;
@@ -63,6 +65,12 @@ namespace App
                     }
 
                     k++;
+
+                    if (k >= maxIterations)
+                    {
+                        Console.WriteLine("Reached max number of iterations: " + maxIterations);
+                        break;
+                    }
                 } while (true);
 
                 Console.WriteLine("Calculated in " + k + " iterations");

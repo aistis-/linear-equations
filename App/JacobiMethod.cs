@@ -13,6 +13,8 @@ namespace App
 
         private float epsilon;
 
+        private int maxIterations = 5000;
+
         private Dictionary<int, Matrix> x;
 
         public JacobiMethod(Matrix matrixA, Matrix matrixB, Matrix matrixX, float epsilon)
@@ -70,6 +72,12 @@ namespace App
                     }
 
                     k++;
+
+                    if (k >= maxIterations)
+                    {
+                        Console.WriteLine("Reached max number of iterations: " + maxIterations);
+                        break;
+                    }
                 } while (true);
 
                 Console.WriteLine("Calculated in " + k + " iterations");
