@@ -31,7 +31,7 @@ namespace App
                 letters = new string[] { "B", "C", "D", "X" };
             }
             else {
-                letters = new string[] { "T", "C"};
+                letters = new string[] { "T", "C", "X"};
             }
 
             for (int i = 0; i < letters.Length; i++)
@@ -84,6 +84,9 @@ namespace App
                                             break;
                                         case 1:
                                             Part2.matrixC = content;
+                                            break;
+                                        case 2:
+                                            Part2.matrixX = content;
                                             break;
                                     }
                                 }

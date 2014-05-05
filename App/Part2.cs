@@ -11,6 +11,7 @@ namespace App
     {
         public static string matrixT;
         public static string matrixC;
+        public static string matrixX;
 
         public static float k;
         public static float epsilon;
@@ -37,6 +38,13 @@ namespace App
             Console.WriteLine("\n\n");
 
             Matrix loadedMatrixA = new Matrix(matrixT, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
+            Matrix loadedMatrixX = new Matrix(matrixX, "\n");
+
+            InverseIteration steepestDescentMethod = new InverseIteration(
+                loadedMatrixA, loadedMatrixX, epsilon
+            );
+
+            steepestDescentMethod.solve();
 
             Console.ReadKey();
         }
