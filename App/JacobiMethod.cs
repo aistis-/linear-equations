@@ -13,7 +13,7 @@ namespace App
 
         private float epsilon;
 
-        private int maxIterations = 5000;
+        private int maxIterations = 100000;
 
         private Dictionary<int, Matrix> x;
 
@@ -30,6 +30,11 @@ namespace App
         }
 
         public void solve()
+        {
+            solve(true);
+        }
+
+        public void solve(bool print)
         {
             if (!converges())
             {
@@ -64,7 +69,10 @@ namespace App
 
                     x.Add(k + 1, matrix);
 
-                    printIteration(k, matrix);
+                    if (print)
+                    {
+                        printIteration(k, matrix);
+                    }
 
                     if (isAccurateEnough(k + 1))
                     {
@@ -80,7 +88,10 @@ namespace App
                     }
                 } while (true);
 
-                Console.WriteLine("Calculated in " + k + 1 + " iterations");
+                if (print)
+                {
+                    Console.WriteLine("Calculated in " + (k + 1) + " iterations");
+                }
             }
         }
 
@@ -161,6 +172,11 @@ namespace App
             }
 
             return matrix;
+        }
+
+        public Matrix getResult()
+        {
+            return x.Last().Value;
         }
     }
 }

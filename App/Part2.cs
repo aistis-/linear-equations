@@ -46,6 +46,7 @@ namespace App
 
             Console.WriteLine("Calculated matrix A");
             loadedMatrixA.print();
+            Console.WriteLine();
 
             InverseIteration steepestDescentMethod = new InverseIteration(
                 loadedMatrixA, loadedMatrixX, epsilon, lambda

@@ -12,94 +12,101 @@ namespace App
         private Matrix matrixX;
         private Matrix matrixE;
 
-        private float lambda;
         private float epsilon;
 
-        private int maxIterations = 5000;
+        private int maxIterations = 5;
 
         private Dictionary<int, Matrix> x;
+        Dictionary<int, float> lambda;
 
-        public InverseIteration(Matrix matrixA, Matrix matrixX, float lambda, float epsilon)
+        public InverseIteration(Matrix matrixA, Matrix matrixX, float epsilon, float lambda)
         {
             this.matrixA = matrixA;
             this.matrixX = matrixX;
 
-            this.lambda = lambda;
             this.epsilon = epsilon;
 
             this.x = new Dictionary<int, Matrix>();
+            this.lambda = new Dictionary<int, float>();
 
             this.x.Add(0, matrixX);
+            this.lambda.Add(0, lambda);
 
             createMatrixE();
         }
 
         public void solve()
         {
-            Dictionary<int, Matrix> y = new Dictionary<int, Matrix>(); 
+            Dictionary<int, Matrix> y = new Dictionary<int, Matrix>();
             Matrix vector;
-            float mismatch;
-            float lambdaBefore;
             SteepestDescentMethod calculations;
 
-            //if (isValdid())
-            //{
-            //    Console.WriteLine("Matrix A does not satisfiy convergence conditions");
-            //}
-            //else
+            int m = 0;
+
+            do
             {
-                int m = 0;
+                calculations = new SteepestDescentMethod(
+                    matrixA.substractDiangleBy(lambda[m]),
+                    this.x[m],
+                    generateMatrixY(),
+                    epsilon
+                );
 
-                do
+                calculations.solve(false);
+
+                y.Add(m + 1, calculations.getResult());
+
+                float norm = y[m + 1].normOfFrobenius();
+
+                Matrix x = new Matrix(y[m + 1].getSize(), 1);
+
+                for (int i = 0; i < y[m + 1].getSize(); i++)
                 {
-                    y.Add(m, generateMatrixY());
+                    x.matrix[i, 0] = y[m + 1].matrix[i, 0] / norm;
+                }
 
-                    calculations = new SteepestDescentMethod(matrixA, y[m], this.x[0], epsilon);
-                    calculations.solve(false);
+                this.x.Add(m + 1, x);
 
-                    Matrix x = calculations.getResult();
+                vector = matrixA.multiplyWithVector(this.x[m + 1]);
+                //vector.print();
 
-                    vector = matrixA.multiplyWithVector(y[m]);
+                lambda[m + 1] = vector.getDotProduct(this.x[m + 1]);
 
-                    lambdaBefore = lambda;
-                    lambda = vector.getDotProduct(y[m]);
+                printIteration(m, y[m + 1]);
 
-                    printIteration(m, lambda, y[m]);
+                if (isAccurateEnough(m))
+                {
+                    break;
+                }
 
-                    if (1 <= m)
-                    {
-                        mismatch = 0;
-
-                        for (int i = 0; i < y[m].getSize(); i++)
-                        {
-                            mismatch += (y[m].matrix[i, 0] - y[m - 1].matrix[i, 0])
-                                * (y[m].matrix[i, 0] - y[m - 1].matrix[i, 0]);
-
-                            mismatch = (float)Math.Sqrt(mismatch);
-                        }
-
-                        if (2 <= mismatch)
-                        {
-                            y[m] = y[m].multiplyBy(-1);
-                        }
-
-                        if (Math.Abs(lambdaBefore - lambda) <= epsilon && mismatch <= epsilon)
-                        {
-                            break;
-                        }
-			        }
+                if (this.x[m + 1].substractWith(this.x[m]).normOfFrobenius() >= 2)
+                {
+                    this.x[m + 1] = this.x[m + 1].multiplyBy(-1);
+			    }
 
 
-                    m++;
+                m++;
 
-                    if (m >= maxIterations)
-                    {
-                        Console.WriteLine("Reached max number of iterations: " + maxIterations);
-                        break;
-                    }
-                } while (true);
+                if (m >= maxIterations)
+                {
+                    Console.WriteLine("Reached max number of iterations: " + maxIterations);
+                    break;
+                }
+            } while (true);
 
-                Console.WriteLine("Calculated in " + m + 1 + " iterations");
+            Console.WriteLine("Calculated in " + (m + 1) + " iterations");
+        }
+
+        private bool isAccurateEnough(int m)
+        {
+            if (Math.Abs(lambda[m + 1] - lambda[m]) <= epsilon
+                && x[m + 1].substractWith(x[m]).normOfFrobenius() <= epsilon)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -135,11 +142,27 @@ namespace App
             return new Matrix(y);
         }
 
-        private void printIteration(int m, float lambda, Matrix y)
+        private void printIteration(int m, Matrix y)
         {
-            Console.Write("Iteration: " + (m + 1) + " Lambda: " + lambda + " Y: [");
+            Console.WriteLine("Iteration: " + (m + 1));
+            Console.WriteLine("Lambda: " + lambda[m + 1]);
+            Console.Write("X: [");
 
             int n = y.getSize();
+
+            for (int i = 0; i < n; i++)
+            {
+                if (i + 1 == n)
+                {
+                    Console.Write(this.x[m + 1].matrix[i, 0] + "]\n");
+                }
+                else
+                {
+                    Console.Write(this.x[m + 1].matrix[i, 0] + ", ");
+                }
+            }
+
+            Console.Write("Y: [");
 
             for (int i = 0; i < n; i++)
             {
@@ -152,6 +175,8 @@ namespace App
                     Console.Write(y.matrix[i, 0] + ", ");
                 }
             }
+
+            Console.WriteLine("================================");
         }
     }
 }
