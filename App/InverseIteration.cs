@@ -38,6 +38,9 @@ namespace App
         {
             Dictionary<int, Matrix> y = new Dictionary<int, Matrix>(); 
             Matrix vector;
+            float mismatch;
+            float lambdaBefore;
+            SteepestDescentMethod calculations;
 
             //if (isValdid())
             //{
@@ -51,13 +54,41 @@ namespace App
                 {
                     y.Add(m, generateMatrixY());
 
-                    SteepestDescentMethod calculations = new SteepestDescentMethod(matrixA, y[m], this.x[m], epsilon);
-                    calculations.solve();
+                    calculations = new SteepestDescentMethod(matrixA, y[m], this.x[0], epsilon);
+                    calculations.solve(false);
 
                     Matrix x = calculations.getResult();
 
                     vector = matrixA.multiplyWithVector(y[m]);
+
+                    lambdaBefore = lambda;
                     lambda = vector.getDotProduct(y[m]);
+
+                    printIteration(m, lambda, y[m]);
+
+                    if (1 <= m)
+                    {
+                        mismatch = 0;
+
+                        for (int i = 0; i < y[m].getSize(); i++)
+                        {
+                            mismatch += (y[m].matrix[i, 0] - y[m - 1].matrix[i, 0])
+                                * (y[m].matrix[i, 0] - y[m - 1].matrix[i, 0]);
+
+                            mismatch = (float)Math.Sqrt(mismatch);
+                        }
+
+                        if (2 <= mismatch)
+                        {
+                            y[m] = y[m].multiplyBy(-1);
+                        }
+
+                        if (Math.Abs(lambdaBefore - lambda) <= epsilon && mismatch <= epsilon)
+                        {
+                            break;
+                        }
+			        }
+
 
                     m++;
 
@@ -102,6 +133,25 @@ namespace App
             y[0, 0] = 1;
 
             return new Matrix(y);
+        }
+
+        private void printIteration(int m, float lambda, Matrix y)
+        {
+            Console.Write("Iteration: " + (m + 1) + " Lambda: " + lambda + " Y: [");
+
+            int n = y.getSize();
+
+            for (int i = 0; i < n; i++)
+            {
+                if (i + 1 == n)
+                {
+                    Console.Write(y.matrix[i, 0] + "]\n");
+                }
+                else
+                {
+                    Console.Write(y.matrix[i, 0] + ", ");
+                }
+            }
         }
     }
 }

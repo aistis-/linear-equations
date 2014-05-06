@@ -31,6 +31,11 @@ namespace App
 
         public void solve()
         {
+            solve(true);
+        }
+
+        public void solve(bool print)
+        {
             if (!converges())
             {
                 Console.WriteLine("Matrix A does not satisfiy convergence conditions");
@@ -57,7 +62,10 @@ namespace App
 
                     x.Add(k + 1, matrixX);
 
-                    printIteration(k, matrixX, matrixZ);
+                    if (print)
+                    {
+                        printIteration(k, matrixX, matrixZ);
+                    }
 
                     if (isAccurateEnough(matrixZ))
                     {
@@ -73,7 +81,10 @@ namespace App
                     }
                 } while (true);
 
-                Console.WriteLine("Calculated in " + k + " iterations");
+                if (print)
+                {
+                    Console.WriteLine("Calculated in " + k + " iterations");
+                }
             }
         }
 
