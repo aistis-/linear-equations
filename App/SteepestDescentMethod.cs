@@ -143,5 +143,10 @@ namespace App
 
             return matrix;
         }
+
+        public Matrix getResult()
+        {
+            return x.Last().Value;
+        }
     }
 }

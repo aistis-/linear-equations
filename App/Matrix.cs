@@ -143,5 +143,51 @@ namespace App
 
             return (float) Math.Sqrt(result);
         }
+
+        public Matrix substractDiangleBy(float value)
+        {
+            float[,] result = new float[this.matrix.GetLength(0), this.matrix.GetLength(1)];
+
+            for (int row = 0; row < this.matrix.GetLength(0); row++)
+            {
+                for (int column = 0; column < this.matrix.GetLength(1); column++)
+                {
+                    if (row == column)
+                    {
+                        result[row, column] = matrix[row, column] - value;
+                    }
+                    else
+                    {
+                        result[row, column] = matrix[row, column];
+                    }
+                }
+            }
+
+            return new Matrix(result);
+        }
+
+        public Matrix multiplyWithVector(Matrix vector)
+        {
+            float[,] result = new float[this.matrix.GetLength(0), 1];
+
+            for (int row = 0; row < matrix.GetLength(0); row++)
+            {
+                result[row, 0] = getRowInMatrix(row).getDotProduct(vector);
+            }
+
+            return new Matrix(result);
+        }
+
+        private Matrix getRowInMatrix(int row)
+        {
+            float[,] result = new float[this.matrix.GetLength(1), 1];
+
+            for (int coulmn = 0; coulmn < this.matrix.GetLength(1); coulmn++)
+            {
+                result[coulmn, 0] = matrix[row, coulmn];
+            }
+
+            return new Matrix(result);
+        }
     }
 }

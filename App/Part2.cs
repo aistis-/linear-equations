@@ -44,6 +44,9 @@ namespace App
             Matrix loadedMatrixA = new Matrix(matrixT, "\n").addWith(new Matrix(matrixC, "\n").multiplyBy(k));
             Matrix loadedMatrixX = new Matrix(matrixX, "\n");
 
+            Console.WriteLine("Calculated matrix A");
+            loadedMatrixA.print();
+
             InverseIteration steepestDescentMethod = new InverseIteration(
                 loadedMatrixA, loadedMatrixX, epsilon, lambda
             );

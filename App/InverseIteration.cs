@@ -36,6 +36,8 @@ namespace App
 
         public void solve()
         {
+            Dictionary<int, Matrix> y = new Dictionary<int, Matrix>(); 
+            Matrix vector;
 
             //if (isValdid())
             //{
@@ -43,22 +45,30 @@ namespace App
             //}
             //else
             {
-                int k = 0;
+                int m = 0;
 
                 do
                 {
-                    
+                    y.Add(m, generateMatrixY());
 
-                    k++;
+                    SteepestDescentMethod calculations = new SteepestDescentMethod(matrixA, y[m], this.x[m], epsilon);
+                    calculations.solve();
 
-                    if (k >= maxIterations)
+                    Matrix x = calculations.getResult();
+
+                    vector = matrixA.multiplyWithVector(y[m]);
+                    lambda = vector.getDotProduct(y[m]);
+
+                    m++;
+
+                    if (m >= maxIterations)
                     {
                         Console.WriteLine("Reached max number of iterations: " + maxIterations);
                         break;
                     }
                 } while (true);
 
-                Console.WriteLine("Calculated in " + k + " iterations");
+                Console.WriteLine("Calculated in " + m + " iterations");
             }
         }
 
@@ -68,7 +78,7 @@ namespace App
 
             for (int i = 0; i < matrixA.getSize(); i++)
                 for (int j = 0; j < matrixA.getSize(); j++)
-                    if (j == i)
+                    if (i == j)
                     {
                         E[i, j] = 1;
                     }
@@ -78,6 +88,20 @@ namespace App
                     }
 
             matrixE = new Matrix(E);
+        }
+
+        private Matrix generateMatrixY()
+        {
+            float[,] y = new float[matrixA.getSize(), 1];
+
+            for (int i = 0; i < matrixA.getSize(); i++)
+            {
+                y[i, 0] = 0;
+            }
+
+            y[0, 0] = 1;
+
+            return new Matrix(y);
         }
     }
 }

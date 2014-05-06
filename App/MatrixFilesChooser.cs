@@ -87,6 +87,9 @@ namespace App
                                             break;
                                         case 2:
                                             Part2.matrixX = content;
+
+                                            this.Close();
+
                                             break;
                                     }
                                 }
