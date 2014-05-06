@@ -99,7 +99,7 @@ namespace App
                     }
                 } while (true);
 
-                Console.WriteLine("Calculated in " + m + " iterations");
+                Console.WriteLine("Calculated in " + m + 1 + " iterations");
             }
         }
 

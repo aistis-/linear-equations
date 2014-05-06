@@ -83,7 +83,7 @@ namespace App
 
                 if (print)
                 {
-                    Console.WriteLine("Calculated in " + k + " iterations");
+                    Console.WriteLine("Calculated in " + k + 1 + " iterations");
                 }
             }
         }
