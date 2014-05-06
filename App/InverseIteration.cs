@@ -68,7 +68,6 @@ namespace App
                 this.x.Add(m + 1, x);
 
                 vector = matrixA.multiplyWithVector(this.x[m + 1]);
-                //vector.print();
 
                 lambda[m + 1] = vector.getDotProduct(this.x[m + 1]);
 
