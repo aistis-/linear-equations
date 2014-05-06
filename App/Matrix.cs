@@ -16,6 +16,21 @@ namespace App
             this.matrix = matrix;
         }
 
+        public Matrix(int rows, int columns)
+        {
+            float[,] result = new float[rows, columns];
+
+            for (int row = 0; row < rows; row++)
+            {
+                for (int column = 0; column < columns; column++)
+                {
+                    result[row, column] = 0;
+                }
+            }
+
+            this.matrix = result;
+        }
+
         public Matrix(string matrixInString, string lineSeparator)
         {
             string[] rows = matrixInString.Split(new string[] { lineSeparator }, StringSplitOptions.None);
@@ -135,7 +150,7 @@ namespace App
 
             for (int row = 0; row < this.matrix.GetLength(0); row++)
             {
-                for (int column = 0; column + 1 < this.matrix.GetLength(1); column++)
+                for (int column = 0; column < this.matrix.GetLength(1); column++)
                 {
                     result += this.matrix[row, column] * this.matrix[row, column];
                 }
