@@ -14,7 +14,7 @@ namespace App
 
         private float epsilon;
 
-        private int maxIterations = 5;
+        private int maxIterations = 1000000;
 
         private Dictionary<int, Matrix> x;
         Dictionary<int, float> lambda;
@@ -39,22 +39,20 @@ namespace App
         {
             Dictionary<int, Matrix> y = new Dictionary<int, Matrix>();
             Matrix vector;
-            SteepestDescentMethod calculations;
+            Matrix calculations;
 
             int m = 0;
 
             do
             {
-                calculations = new SteepestDescentMethod(
+                calculations = calculateGradient(
                     matrixA.substractDiangleBy(lambda[m]),
                     this.x[m],
                     generateMatrixY(),
                     epsilon
                 );
 
-                calculations.solve(false);
-
-                y.Add(m + 1, calculations.getResult());
+                y.Add(m + 1, calculations);
 
                 float norm = y[m + 1].normOfFrobenius();
 
@@ -83,14 +81,13 @@ namespace App
                     this.x[m + 1] = this.x[m + 1].multiplyBy(-1);
 			    }
 
-
-                m++;
-
                 if (m >= maxIterations)
                 {
                     Console.WriteLine("Reached max number of iterations: " + maxIterations);
                     break;
                 }
+
+                m++;
             } while (true);
 
             Console.WriteLine("Calculated in " + (m + 1) + " iterations");
@@ -99,7 +96,8 @@ namespace App
         private bool isAccurateEnough(int m)
         {
             if (Math.Abs(lambda[m + 1] - lambda[m]) <= epsilon
-                && x[m + 1].substractWith(x[m]).normOfFrobenius() <= epsilon)
+                //&& x[m + 1].substractWith(x[m]).normOfFrobenius() <= epsilon
+                )
             {
                 return true;
             }
@@ -161,21 +159,114 @@ namespace App
                 }
             }
 
-            Console.Write("Y: [");
+            Console.WriteLine("================================");
+        }
 
-            for (int i = 0; i < n; i++)
+        private Matrix calculateGradient(Matrix A, Matrix X, Matrix B, float epsilon)
+        {
+            int size = X.getSize();
+
+            double[] p0 = new double[size];
+            double[] z0 = new double[size];
+            double[] p = new double[size];
+            double[] r = new double[size];
+            double[] z = new double[size];
+            double[] n = new double[size];
+            double[] x = new double[size];
+            double[] x0 = matrixVectorToDouble(X);
+            double tk;
+            double Bk;
+            int k = 0;
+            double mistake = Math.Pow(epsilon, 2);
+
+            for (int i = 0; i < size; i++)
+                x[i] = matrixVectorToDouble(X)[i];
+
+            for (int i = 0; i < size; i++)
             {
-                if (i + 1 == n)
-                {
-                    Console.Write(y.matrix[i, 0] + "]\n");
-                }
-                else
-                {
-                    Console.Write(y.matrix[i, 0] + ", ");
-                }
+                p[i] = 0;
+
+                for (int j = 0; j < size; j++)
+                    p[i] = p[i] + A.matrix[i, j] * x0[j];
+
+                p[i] = p[i] - B.matrix[i, 0];
+                z[i] = p[i];
             }
 
-            Console.WriteLine("================================");
+            while (true)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    x0[i] = x[i];
+                    p0[i] = p[i];
+                    z0[i] = z[i];
+                }
+
+                for (int i = 0; i < size; i++)
+                {
+                    r[i] = 0;
+                    for (int j = 0; j < size; j++)
+                        r[i] = r[i] + A.matrix[i, j] * p0[j];
+                }
+
+                double vectorZ0 = vector(z0, z0);
+                tk = vectorZ0 / vector(r, p0);
+
+                for (int i = 0; i < size; i++)
+                {
+                    x[i] = x0[i] - tk * p0[i];
+                    z[i] = z0[i] - tk * r[i];
+                }
+
+                for (int i = 0; i < size; i++)
+                {
+                    n[i] = 0;
+                    for (int j = 0; j < size; j++)
+                        n[i] = n[i] + A.matrix[i, j] * x[j];
+                    n[i] = n[i] - B.matrix[i, 0];
+                }
+
+                double vectorZ = vector(z, z);
+
+                if (vectorZ < mistake)
+                    break;
+                else
+                    Bk = vectorZ / vectorZ0;
+                for (int i = 0; i < size; i++)
+                    p[i] = z[i] + Bk * p0[i];
+                k++;
+            }
+
+            float[,] result = new float[size, 1];
+
+            for (int i = 0; i < size; i++)
+            {
+                result[i, 0] = (float)x[i];
+            }
+
+            return new Matrix(result);
+        }
+
+        private double[] matrixVectorToDouble(Matrix matrix)
+        {
+            double[] result = new double[matrix.getSize()];
+
+            for (int i = 0; i < matrix.getSize(); i++)
+            {
+                result[i] = matrix.matrix[i, 0];
+            }
+
+            return result;
+        }
+
+        private double vector(double[] x, double[] y)
+        {
+            double sum = 0;
+
+            for (int i = 0; i < x.Length; i++)
+                sum = sum + x[i] * y[i];
+
+            return sum;
         }
     }
 }

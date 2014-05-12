@@ -20,7 +20,6 @@ namespace App
         [STAThread]
         static void Main(string[] args)
         {
-
             Console.WriteLine("Choose files which contains seperated matrices (B, C, D and iniciating X)");
 
             // iniciate file chosers for each matrix
@@ -52,6 +51,8 @@ namespace App
             );
 
             jacobiMethod.solve();
+
+            Console.WriteLine();
 
             SteepestDescentMethod steepestDescentMethod = new SteepestDescentMethod(
                 loadedMatrixA, loadedMatrixB, loadedMatrixX, epsilon

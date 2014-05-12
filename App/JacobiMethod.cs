@@ -141,6 +141,8 @@ namespace App
         private bool isAccurateEnough(int k)
         {
             float result;
+            bool accurate = true;
+            float accuracy = 0;
 
             for (int i = 0; i < matrixA.getSize(); i++)
             {
@@ -155,11 +157,20 @@ namespace App
 
                 if (epsilon < Math.Abs(result))
                 {
-                    return false;
+                    accurate = false;
                 }
+
+                if (accuracy < Math.Abs(result))
+                {
+                    accuracy = Math.Abs(result);
+                }
+
+
             }
 
-            return true;
+            //Console.WriteLine("Iteration: " + (k + 1) + "  Accuracy = " + accuracy);
+
+            return accurate;
         }
 
         private float[,] getZeroMatrixForX(int n)

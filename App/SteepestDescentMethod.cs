@@ -67,7 +67,7 @@ namespace App
                         printIteration(k, matrixX, matrixZ);
                     }
 
-                    if (isAccurateEnough(matrixZ))
+                    if (isAccurateEnough(matrixZ, k))
                     {
                         break;
                     }
@@ -92,7 +92,6 @@ namespace App
         {
             for (int i = 0; i < matrixA.getSize(); i++)
             {
-
                 for (int j = 0; j < matrixA.getSize(); j++)
                 {
                     if (matrixA.matrix[i, j] != matrixA.matrix[j, i])
@@ -138,8 +137,30 @@ namespace App
             }
         }
 
-        private bool isAccurateEnough(Matrix matrixZ)
+        private bool isAccurateEnough(Matrix matrixZ, int k)
         {
+            float result;
+            float accuracy = 0;
+
+            for (int i = 0; i < matrixA.getSize(); i++)
+            {
+                result = 0;
+
+                for (int j = 0; j < matrixA.getSize(); j++)
+                {
+                    result += matrixA.matrix[i, j] * x[k].matrix[j, 0];
+                }
+
+                result -= matrixB.matrix[i, 0];
+
+                if (accuracy < Math.Abs(result))
+                {
+                    accuracy = Math.Abs(result);
+                }
+            }
+
+            //Console.WriteLine("Iteration: " + (k + 1) + "  Accuracy = " + accuracy);
+
             return matrixZ.getDotProduct(matrixZ) < epsilon * epsilon;
         }
 

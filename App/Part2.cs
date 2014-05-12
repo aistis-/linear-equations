@@ -21,7 +21,7 @@ namespace App
         static void Main(string[] args)
         {
 
-            Console.WriteLine("Choose files which contains seperated matrices (T and C)");
+            Console.WriteLine("Choose files which contains seperated matrices (T, C and X)");
 
             // iniciate file chosers for each matrix
             Application.EnableVisualStyles();
